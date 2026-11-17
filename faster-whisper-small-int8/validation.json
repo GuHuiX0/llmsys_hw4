@@ -1,0 +1,9 @@
+{
+  "base64_round_trip_sha256": "passed",
+  "native_saved_compute_type": "int8_float32",
+  "faster_whisper_offline_inference": "passed (one second of silence)",
+  "faster_whisper_version": "1.2.1",
+  "ctranslate2_version": "4.6.0",
+  "split_base64_round_trip_sha256": "passed",
+  "split_part_count": 7
+}

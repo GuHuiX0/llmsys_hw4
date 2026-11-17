@@ -1,0 +1,55 @@
+{
+  "model": "Whisper small multilingual",
+  "format": "CTranslate2",
+  "quantization": "int8",
+  "source": "https://huggingface.co/rhasspy/faster-whisper-small-int8/resolve/a94e151d8147ce851767640f24b3e854cf60def7",
+  "tokenizer_source": "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/tokenizer.json",
+  "license": "MIT",
+  "model_bytes": 254058853,
+  "files": {
+    "model.bin": "4f1ec7d11451526f2cc3207a5a11c2bdf8a036019402ef2e1d33f58f5f53aa54",
+    "config.json": "c9dee3d675c31c3763c1ee3c9e7235050e877dadd9002c5b3c60366e3d81da2a",
+    "vocabulary.txt": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913",
+    "tokenizer.json": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab",
+    "LICENSE.txt": "b5d65a59060e68c4ff940e1eddfa6f94b2d68fdf58ed7f4dd57721c997e35e9d",
+    "decode.py": "06d2ba38398854e80dd18da98f473f0a71a3ab8a04d025ca9548adb5985419cf"
+  },
+  "base64_sha256": "53f1d1369769e750aad4576961ddcd9129b2b6cb222e29de83a504c0c39561a8",
+  "base64_parts": [
+    {
+      "name": "model.bin.b64.part0000",
+      "size": 50331648,
+      "sha256": "9e4a44db1956a982c6680b57dd9e08faded080bd90f60e309de8d481acd5baf6"
+    },
+    {
+      "name": "model.bin.b64.part0001",
+      "size": 50331648,
+      "sha256": "a9dc6c209c68585f74a304c36ae4eb10307cb3b67437d33501bf2aec3202bb82"
+    },
+    {
+      "name": "model.bin.b64.part0002",
+      "size": 50331648,
+      "sha256": "3119e6f689514b2012325868c339d4bc0a2d5aa2f318f0e5bdbd05038016a506"
+    },
+    {
+      "name": "model.bin.b64.part0003",
+      "size": 50331648,
+      "sha256": "f2105d7e04607fa4be7f16e9063674849ef51cfd47d9ed1a2501e44c98601ae6"
+    },
+    {
+      "name": "model.bin.b64.part0004",
+      "size": 50331648,
+      "sha256": "607d9accf01bc0da3f1ed42d7aee88c645268321cfeb12f9a5a1d7e03688692b"
+    },
+    {
+      "name": "model.bin.b64.part0005",
+      "size": 50331648,
+      "sha256": "128ec16e204285bce43a5ef69ad32a3d3045e74e835c7e55e295a3570bb9b55a"
+    },
+    {
+      "name": "model.bin.b64.part0006",
+      "size": 36755252,
+      "sha256": "26f0e4579549d4311db0fa1cf9dc25475a85d307a5283c9d0e1285dd1b1fba41"
+    }
+  ]
+}
