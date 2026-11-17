@@ -1,0 +1,124 @@
+name: Add faster-whisper INT8 model folder to main
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/add-whisper-int8-folder.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: add-whisper-int8-folder
+  cancel-in-progress: false
+
+jobs:
+  commit-model:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Clone main and download verified model package
+        shell: bash
+        run: |
+          gh auth setup-git
+          git clone --depth 1 --branch main "https://github.com/$GITHUB_REPOSITORY.git" "$RUNNER_TEMP/model-repo"
+          cd "$RUNNER_TEMP"
+          curl --fail --location --retry 5 --connect-timeout 30 --max-time 900 \
+            -o whisper-int8-package.zip \
+            "https://github.com/$GITHUB_REPOSITORY/releases/download/faster-whisper-small-int8-base64-v1/faster-whisper-small-int8-base64.zip"
+
+      - name: Split base64 weights and verify decoding
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/model-repo"
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import subprocess
+          import sys
+          import zipfile
+          
+          DECODE = "\"\"\"Decode the split base64 weights into model.bin. Python 3.8+; no dependencies.\"\"\"\nimport base64\nimport hashlib\nimport json\nfrom pathlib import Path\n\ndef digest(path):\n    value = hashlib.sha256()\n    with path.open(\"rb\") as source:\n        while block := source.read(8 * 1024 * 1024):\n            value.update(block)\n    return value.hexdigest()\n\ndef main():\n    root = Path(__file__).resolve().parent\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    for name, expected in manifest[\"files\"].items():\n        if name != \"model.bin\" and digest(root / name) != expected:\n            raise SystemExit(f\"Checksum failed: {name}. Download the folder again.\")\n    target = root / \"model.bin\"\n    if target.exists():\n        if digest(target) == manifest[\"files\"][\"model.bin\"]:\n            print(\"model.bin already exists and is verified.\")\n            return\n        raise SystemExit(\"model.bin already exists but differs. Move it aside first.\")\n    temporary = root / \"model.bin.partial\"\n    output = temporary.open(\"xb\")\n    original_hash = hashlib.sha256()\n    encoded_hash = hashlib.sha256()\n    total = 0\n    try:\n        with output:\n            for part in manifest[\"base64_parts\"]:\n                path = root / part[\"name\"]\n                part_hash = hashlib.sha256()\n                part_size = 0\n                with path.open(\"rb\") as source:\n                    while block := source.read(8 * 1024 * 1024):\n                        encoded_hash.update(block)\n                        part_hash.update(block)\n                        part_size += len(block)\n                        decoded = base64.b64decode(block, validate=True)\n                        output.write(decoded)\n                        original_hash.update(decoded)\n                        total += len(decoded)\n                if part_hash.hexdigest() != part[\"sha256\"] or part_size != part[\"size\"]:\n                    raise ValueError(f\"Corrupt part: {path.name}\")\n                print(f\"Decoded {path.name}\", flush=True)\n        if encoded_hash.hexdigest() != manifest[\"base64_sha256\"]:\n            raise ValueError(\"Combined base64 SHA-256 mismatch\")\n        if original_hash.hexdigest() != manifest[\"files\"][\"model.bin\"] or total != manifest[\"model_bytes\"]:\n            raise ValueError(\"Decoded model.bin SHA-256 or size mismatch\")\n        temporary.rename(target)\n    except BaseException:\n        temporary.unlink(missing_ok=True)\n        raise\n    print(\"Ready: model.bin restored and SHA-256 verified.\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          README = "# Whisper small — CTranslate2 INT8\n\nThis folder contains the multilingual Whisper small model with INT8 weights for faster-whisper.\nThe weights are plain base64 split into seven files below GitHub's 100 MiB file limit.\n\nFrom the repository root, restore the weights with Python 3.8 or newer:\n\n```sh\npython faster-whisper-small-int8/decode.py\n```\n\nOn Linux/macOS, use `python3` if needed. This command requires no extra packages.\nIt verifies every part and the reconstructed `model.bin`. Keep all parts and support files together.\n\nInstall faster-whisper in your application environment:\n\n```sh\npip install faster-whisper\n```\n\nThen load the folder from the repository root:\n\n```python\nfrom faster_whisper import WhisperModel\n\nmodel = WhisperModel(\n    \"faster-whisper-small-int8\",\n    device=\"cpu\",\n    compute_type=\"int8\",\n    local_files_only=True,\n)\nsegments, info = model.transcribe(\"audio.wav\")\nfor segment in segments:\n    print(segment.text)\n```\n\nIncluded: model.bin.b64.part0000 through part0006, config.json, tokenizer.json,\nvocabulary.txt, decode.py, manifest.json, validation.json, SHA256SUMS, and LICENSE.txt.\n\nThe base64 decodes to unchanged CTranslate2 INT8 weights from\n[rhasspy/faster-whisper-small-int8](https://huggingface.co/rhasspy/faster-whisper-small-int8/tree/a94e151d8147ce851767640f24b3e854cf60def7).\nTokenizer: [Systran/faster-whisper-small](https://huggingface.co/Systran/faster-whisper-small/tree/536b0662742c02347bc0e980a01041f333bce120).\nLicense: MIT; see LICENSE.txt. The model was tested with offline faster-whisper inference.\nThe split base64 was decoded again and verified before this folder was committed.\n"
+          ROOT = Path("faster-whisper-small-int8")
+          if ROOT.exists():
+              raise SystemExit("Destination folder already exists; refusing to replace existing files.")
+          archive = Path("../whisper-int8-package.zip")
+          with archive.open("rb") as source:
+              actual = hashlib.file_digest(source, "sha256").hexdigest()
+          if actual != "e41820cc4e1e1150a6e92dd84168b0c349cc469e054d5b4a8c8d84d6c37bb073":
+              raise ValueError("Release ZIP SHA-256 mismatch")
+          expected_members = {
+              "model.bin.b64", "config.json", "vocabulary.txt", "tokenizer.json",
+              "LICENSE.txt", "decode.py", "manifest.json", "validation.json", "README.txt", "SHA256SUMS"
+          }
+          with zipfile.ZipFile(archive) as package:
+              expected_paths = {f"{ROOT}/{name}" for name in expected_members}
+              if set(package.namelist()) != expected_paths:
+                  raise ValueError("Unexpected archive contents")
+              package.extractall(".")
+          
+          def digest(path):
+              with path.open("rb") as source:
+                  return hashlib.file_digest(source, "sha256").hexdigest()
+          
+          manifest = json.loads((ROOT / "manifest.json").read_text())
+          for name, expected in manifest["files"].items():
+              if name != "model.bin" and digest(ROOT / name) != expected:
+                  raise ValueError(f"Release support file SHA-256 mismatch: {name}")
+          encoded = ROOT / "model.bin.b64"
+          if digest(encoded) != manifest["base64_sha256"]:
+              raise ValueError("Release base64 SHA-256 mismatch")
+          parts = []
+          with encoded.open("rb") as source:
+              index = 0
+              while block := source.read(48 * 1024 * 1024):
+                  name = f"model.bin.b64.part{index:04d}"
+                  path = ROOT / name
+                  path.write_bytes(block)
+                  parts.append({"name": name, "size": len(block), "sha256": digest(path)})
+                  index += 1
+          encoded.unlink()
+          (ROOT / "decode.py").write_text(DECODE, encoding="utf-8")
+          manifest["files"]["decode.py"] = digest(ROOT / "decode.py")
+          manifest["base64_parts"] = parts
+          (ROOT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          (ROOT / "README.txt").unlink()
+          (ROOT / "README.md").write_text(README, encoding="utf-8")
+          (ROOT / ".gitattributes").write_text("*.b64.part* -text -diff\n", encoding="utf-8")
+          (ROOT / ".gitignore").write_text("model.bin\nmodel.bin.partial\n", encoding="utf-8")
+          
+          # Validate restoration from exactly the split files that will be committed.
+          subprocess.run([sys.executable, str(ROOT / "decode.py")], check=True)
+          if digest(ROOT / "model.bin") != manifest["files"]["model.bin"]:
+              raise ValueError("Split base64 round trip failed")
+          (ROOT / "model.bin").unlink()
+          validation = json.loads((ROOT / "validation.json").read_text())
+          validation["split_base64_round_trip_sha256"] = "passed"
+          validation["split_part_count"] = len(parts)
+          (ROOT / "validation.json").write_text(json.dumps(validation, indent=2) + "\n", encoding="utf-8")
+          payload = sorted(path for path in ROOT.iterdir() if path.is_file() and path.name != "SHA256SUMS")
+          (ROOT / "SHA256SUMS").write_text("".join(
+              f"{digest(path)}  {path.name}\n" for path in payload
+          ), encoding="utf-8")
+          assert len(parts) == 7
+          assert all(part["size"] < 100 * 1024 * 1024 for part in parts)
+          print(f"Verified folder with {len(parts)} base64 parts, ready for main.", flush=True)
+          PY
+
+      - name: Commit model folder to main
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/model-repo"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- faster-whisper-small-int8
+          git diff --cached --stat
+          git commit -m "Add Whisper small CTranslate2 INT8 model folder with base64 weights"
+          git push origin HEAD:main
+          printf '[Open model folder on main](https://github.com/%s/tree/main/faster-whisper-small-int8)\n' \
+            "$GITHUB_REPOSITORY" >> "$GITHUB_STEP_SUMMARY"
