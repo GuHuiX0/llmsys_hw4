@@ -1,0 +1,189 @@
+name: Publish faster-whisper small INT8 base64
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/upload-faster-whisper-small-int8.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: faster-whisper-small-int8-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Prepare Python dependencies
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/whisper-venv"
+          "$RUNNER_TEMP/whisper-venv/bin/pip" install --disable-pip-version-check faster-whisper==1.2.1 ctranslate2==4.6.0
+
+      - name: Download INT8 model, encode, decode, and test offline inference
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/whisper-int8"
+          cd "$RUNNER_TEMP/whisper-int8"
+          "$RUNNER_TEMP/whisper-venv/bin/python" - <<'PY'
+          import base64
+          import hashlib
+          import importlib.metadata
+          import json
+          from pathlib import Path
+          import subprocess
+          import sys
+          import zipfile
+          
+          SOURCE = "https://huggingface.co/rhasspy/faster-whisper-small-int8/resolve/a94e151d8147ce851767640f24b3e854cf60def7"
+          TOKENIZER = "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/tokenizer.json"
+          EXPECTED = "4f1ec7d11451526f2cc3207a5a11c2bdf8a036019402ef2e1d33f58f5f53aa54"
+          DECODE = "\"\"\"Restore model.bin from model.bin.b64. Uses only Python's standard library.\"\"\"\nimport base64\nimport hashlib\nimport json\nfrom pathlib import Path\n\ndef digest(path):\n    result = hashlib.sha256()\n    with path.open(\"rb\") as source:\n        while block := source.read(8 * 1024 * 1024):\n            result.update(block)\n    return result.hexdigest()\n\ndef main():\n    root = Path(__file__).resolve().parent\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    for name, expected in manifest[\"files\"].items():\n        if name != \"model.bin\" and digest(root / name) != expected:\n            raise SystemExit(f\"Checksum failed: {name}. Download the package again.\")\n    encoded = root / \"model.bin.b64\"\n    if digest(encoded) != manifest[\"base64_sha256\"]:\n        raise SystemExit(\"Checksum failed: model.bin.b64. Download the package again.\")\n    target = root / \"model.bin\"\n    if target.exists():\n        if digest(target) == manifest[\"files\"][\"model.bin\"]:\n            print(\"model.bin already exists and is verified.\")\n            return\n        raise SystemExit(\"model.bin exists but differs. Move it aside before decoding.\")\n    temporary = root / \"model.bin.partial\"\n    # Exclusive creation protects an existing incomplete file.\n    with temporary.open(\"xb\") as output:\n        try:\n            with encoded.open(\"rb\") as source:\n                while block := source.read(8 * 1024 * 1024):\n                    output.write(base64.b64decode(block, validate=True))\n        except BaseException:\n            temporary.unlink(missing_ok=True)\n            raise\n    if digest(temporary) != manifest[\"files\"][\"model.bin\"]:\n        temporary.unlink()\n        raise SystemExit(\"Decoded model failed SHA-256 verification.\")\n    temporary.rename(target)\n    print(\"Ready: model.bin restored and all model files verified.\")\n    print('Load with: WhisperModel(\"/path/to/this/folder\", device=\"cpu\", compute_type=\"int8\", local_files_only=True)')\n\nif __name__ == \"__main__\":\n    main()\n"
+          
+          def digest(path):
+              with Path(path).open("rb") as source:
+                  return hashlib.file_digest(source, "sha256").hexdigest()
+          
+          def download(url, name):
+              subprocess.run(["curl", "--fail", "--location", "--retry", "5",
+                              "--connect-timeout", "30", "--max-time", "900",
+                              "-o", name, url], check=True)
+          
+          for name in ["model.bin", "config.json", "vocabulary.txt"]:
+              download(f"{SOURCE}/{name}", name)
+          if digest("model.bin") != EXPECTED:
+              raise ValueError("Upstream model.bin SHA-256 mismatch")
+          download(TOKENIZER, "tokenizer.json")
+          download("https://raw.githubusercontent.com/openai/whisper/main/LICENSE", "LICENSE.txt")
+          Path("decode.py").write_text(DECODE, encoding="utf-8")
+          files = {name: digest(name) for name in [
+              "model.bin", "config.json", "vocabulary.txt", "tokenizer.json", "LICENSE.txt", "decode.py"
+          ]}
+          with open("model.bin", "rb") as source, open("model.bin.b64", "wb") as output:
+              while block := source.read(6 * 1024 * 1024):
+                  output.write(base64.b64encode(block))
+          manifest = {
+              "model": "Whisper small multilingual", "format": "CTranslate2", "quantization": "int8",
+              "source": SOURCE, "tokenizer_source": TOKENIZER, "license": "MIT",
+              "model_bytes": Path("model.bin").stat().st_size,
+              "files": files, "base64_sha256": digest("model.bin.b64")
+          }
+          Path("manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          
+          # Restore from the exact distributed base64 and verify the full folder.
+          Path("model.bin").unlink()
+          subprocess.run([sys.executable, "decode.py"], check=True)
+          import ctranslate2
+          native = ctranslate2.models.Whisper(".", device="cpu", compute_type="default")
+          stored_compute_type = native.compute_type
+          if stored_compute_type not in ("int8", "int8_float32"):
+              raise ValueError(f"Expected saved INT8 weights, got {stored_compute_type}")
+          native.unload_model()
+          del native
+          
+          # Actual faster-whisper inference with all Hugging Face network access disabled.
+          import os
+          os.environ["HF_HUB_OFFLINE"] = "1"
+          os.environ["TRANSFORMERS_OFFLINE"] = "1"
+          import numpy as np
+          from faster_whisper import WhisperModel
+          model = WhisperModel(".", device="cpu", compute_type="int8", cpu_threads=2, local_files_only=True)
+          assert model.model.is_multilingual
+          segments, info = model.transcribe(
+              np.zeros(16000, dtype=np.float32), language="en", beam_size=1,
+              without_timestamps=True, condition_on_previous_text=False, max_new_tokens=8
+          )
+          list(segments)
+          validation = {
+              "base64_round_trip_sha256": "passed",
+              "native_saved_compute_type": stored_compute_type,
+              "faster_whisper_offline_inference": "passed (one second of silence)",
+              "faster_whisper_version": importlib.metadata.version("faster-whisper"),
+              "ctranslate2_version": ctranslate2.__version__,
+          }
+          Path("validation.json").write_text(json.dumps(validation, indent=2) + "\n", encoding="utf-8")
+          model.model.unload_model()
+          del model
+          Path("model.bin").unlink()
+          
+          Path("README.txt").write_text(
+              "Whisper small multilingual - CTranslate2 INT8 for faster-whisper\n\n"
+              "1. Download faster-whisper-small-int8-base64.zip and extract it.\n"
+              "2. In the extracted faster-whisper-small-int8 folder, run:\n"
+              "     python decode.py\n"
+              "   On Linux/macOS you may need: python3 decode.py\n"
+              "   The helper uses only Python's standard library and verifies SHA-256.\n"
+              "3. Install faster-whisper in your application environment:\n"
+              "     pip install faster-whisper\n"
+              "4. Load the decoded folder (not the individual .bin file):\n\n"
+              "     from faster_whisper import WhisperModel\n"
+              '     model = WhisperModel("/path/to/faster-whisper-small-int8",\n'
+              '                          device="cpu", compute_type="int8", local_files_only=True)\n'
+              '     segments, info = model.transcribe("audio.wav")\n'
+              "     for segment in segments:\n"
+              "         print(segment.text)\n\n"
+              "Manual decoding also works because model.bin.b64 is plain, unwrapped base64:\n"
+              "  Linux: base64 --decode model.bin.b64 > model.bin\n"
+              "  macOS: base64 -D -i model.bin.b64 -o model.bin\n"
+              "  PowerShell: [IO.File]::WriteAllBytes('model.bin', [Convert]::FromBase64String([IO.File]::ReadAllText('model.bin.b64')))\n\n"
+              "If downloading individual release assets, keep model.bin.b64, config.json,\n"
+              "vocabulary.txt, tokenizer.json, LICENSE.txt, decode.py and manifest.json together.\n"
+              "The ZIP contains all required files; model.bin is restored by decode.py.\n"
+              "License: MIT (LICENSE.txt). Weights and original config/vocabulary are unchanged.\n"
+              f"Model source: {SOURCE}\nTokenizer source: {TOKENIZER}\n"
+              "validation.json records the base64 round trip, saved INT8 type, and offline inference test.\n",
+              encoding="utf-8"
+          )
+          payload = sorted(path for path in Path(".").iterdir() if path.is_file() and path.name not in {
+              "package.py", "SHA256SUMS", "faster-whisper-small-int8-base64.zip"
+          })
+          Path("SHA256SUMS").write_text("".join(f"{digest(path)}  {path.name}\n" for path in payload), encoding="utf-8")
+          with zipfile.ZipFile("faster-whisper-small-int8-base64.zip", "w", zipfile.ZIP_DEFLATED, compresslevel=1) as archive:
+              for path in [*payload, Path("SHA256SUMS")]:
+                  archive.write(path, "faster-whisper-small-int8/" + path.name)
+          print(json.dumps(validation), flush=True)
+          PY
+
+      - name: Publish and verify public release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/whisper-int8"
+          release_tag="faster-whisper-small-int8-base64-v1"
+          if ! gh release view "$release_tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$release_tag" --repo "$GITHUB_REPOSITORY" --draft \
+              --target "$GITHUB_SHA" --title "Whisper small — CTranslate2 INT8, base64" --notes-file README.txt
+          fi
+          gh release upload "$release_tag" --repo "$GITHUB_REPOSITORY" --clobber \
+            faster-whisper-small-int8-base64.zip model.bin.b64 config.json vocabulary.txt tokenizer.json \
+            LICENSE.txt decode.py manifest.json validation.json README.txt SHA256SUMS
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" > releases.json
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          release = next(item for item in json.loads(Path("releases.json").read_text())
+                         if item["tag_name"] == "faster-whisper-small-int8-base64-v1")
+          assets = {asset["name"]: asset for asset in release["assets"]}
+          for name in ["faster-whisper-small-int8-base64.zip", "model.bin.b64", "config.json",
+                       "vocabulary.txt", "tokenizer.json", "LICENSE.txt", "decode.py",
+                       "manifest.json", "validation.json", "README.txt", "SHA256SUMS"]:
+              path = Path(name)
+              with path.open("rb") as source:
+                  digest = hashlib.file_digest(source, "sha256").hexdigest()
+              assert assets[name]["state"] == "uploaded", name
+              assert assets[name]["size"] == path.stat().st_size, name
+              assert assets[name]["digest"] == "sha256:" + digest, name
+          print("Verified all uploaded assets")
+          PY
+          gh release edit "$release_tag" --repo "$GITHUB_REPOSITORY" --draft=false --latest=false
+          # This request sends no authentication and verifies public download access.
+          curl --fail --location --silent --show-error --retry 5 --retry-all-errors --max-time 120 \
+            --output /dev/null "https://github.com/$GITHUB_REPOSITORY/releases/download/$release_tag/README.txt"
+          printf '[Download INT8 CTranslate2 model](https://github.com/%s/releases/tag/%s)\n' \
+            "$GITHUB_REPOSITORY" "$release_tag" >> "$GITHUB_STEP_SUMMARY"
