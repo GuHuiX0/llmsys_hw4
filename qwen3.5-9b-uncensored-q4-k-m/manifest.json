@@ -1,0 +1,773 @@
+{
+  "model": "mradermacher/qwen3.5-9b-uncensored-GGUF",
+  "revision": "ad62a6aa367341aa47262e20259c12956a98fad4",
+  "quantization": "Q4_K_M",
+  "format": "GGUF",
+  "file": "qwen3.5-9b-uncensored.Q4_K_M.gguf",
+  "source": "https://huggingface.co/mradermacher/qwen3.5-9b-uncensored-GGUF/resolve/ad62a6aa367341aa47262e20259c12956a98fad4/qwen3.5-9b-uncensored.Q4_K_M.gguf",
+  "size": 5629109952,
+  "sha256": "c70f4a08f6730ee74311f1cdfec2fef8ecc5cc4812de07bb8386854c844bcaab",
+  "encoding": "base64",
+  "base64_sha256": "c458d30d6951edfb6055c985355656a9a20c20ad3d0fb81976e6ce391df94a86",
+  "base64_parts": [
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0000",
+      "size": 50331648,
+      "sha256": "37ec43ebe5f15a09298d11576f7ad8605d7e542b352fa25ff6e03bd4f9650994"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0001",
+      "size": 50331648,
+      "sha256": "05587dcb217cf933dd1c66dd99a2feb9f3b81402a057c81912f10539ece86224"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0002",
+      "size": 50331648,
+      "sha256": "6969a40b814facb9733908730c4f6c1c8b55d13e903a1b9dd2ace6dba0824c18"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0003",
+      "size": 50331648,
+      "sha256": "434c62060d1d1001f4c908566668f5d3f9b3a5d7f19315908beb710a27e19471"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0004",
+      "size": 50331648,
+      "sha256": "b67f3c5d6e542b74e57665e824395422ffb3a7df44198af520ae908bf3ba0fa4"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0005",
+      "size": 50331648,
+      "sha256": "7a1ecb7e7474b558c63f206ec3633d63edab106c5519fbb688dc91c44d73a8e0"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0006",
+      "size": 50331648,
+      "sha256": "909d3439bf5dd0c0d2f06386f3199caa0fa81eb634918b8ef344d496456ccc86"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0007",
+      "size": 50331648,
+      "sha256": "f5b11718ddd901153ef939dd2023fea3edd462d6969767ab96c7c92d8403c183"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0008",
+      "size": 50331648,
+      "sha256": "a8ba619d6e46f0f692e797ac56e397de2a22e4a0a46065933e25be911c97e6e7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0009",
+      "size": 50331648,
+      "sha256": "f6726a673ac175b09310cb9c63bfde379768728f8f5a27d964e8707efa495c91"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0010",
+      "size": 50331648,
+      "sha256": "8ab0f620f35d99b66805d965e3fb8e3f34662b43bbdca545c05f48bd9c0c8e5d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0011",
+      "size": 50331648,
+      "sha256": "8ec8917f81384b3c7b341899118499dd9b08f5525e9c5897ad9103ce2b041469"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0012",
+      "size": 50331648,
+      "sha256": "31d91e2e82e0402614afaac18387b65df5f91112e669c918e80e3bbe332e287c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0013",
+      "size": 50331648,
+      "sha256": "ffc10c26a32122385c4a2be164641d175f27d39290e62bf18bb0a26f59f6a59e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0014",
+      "size": 50331648,
+      "sha256": "ff08fc0b2766d78c1e47b804c2887c1d502bbb08c93641dcfdc3a692d914591f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0015",
+      "size": 50331648,
+      "sha256": "9db56d3ee4166989d8797ebd41cdb1c2c43d158ad58409f6ce2d0beddfcbdce0"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0016",
+      "size": 50331648,
+      "sha256": "0c41cd9794879ce8056dfca4c2d48b24f246ed8962b354d4f7a9a6fcd1f9e602"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0017",
+      "size": 50331648,
+      "sha256": "d71fc2b1edcf28908345791284154eae6ddce72a92c24298bff7209e776e8199"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0018",
+      "size": 50331648,
+      "sha256": "ac821160c8cb6007a77675f7f4efb41fb4fae40ff76a6e10b190e2ecc577cf5a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0019",
+      "size": 50331648,
+      "sha256": "151333dafb185646af84e10968039bf6a43a784334ec586c1a33ee4ccaa79f8d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0020",
+      "size": 50331648,
+      "sha256": "51c5e310f33a17d111a6fbe6903cc49047e121c8eac8b46f57ec427751a03385"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0021",
+      "size": 50331648,
+      "sha256": "bad0b05035c72460363658dfc0047b94fff1860351a5661662e2b586afd2fd76"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0022",
+      "size": 50331648,
+      "sha256": "296126d209e43cd72341ef438ccc1bd366094e76cd985f70baaf8322b26591c1"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0023",
+      "size": 50331648,
+      "sha256": "83a7245a2bc58851293f709da0448fb142d12d4debd03a973b2480d9c067aba2"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0024",
+      "size": 50331648,
+      "sha256": "1b679246954457d89437cf6f440aab2ca4854f5827b6d009f2656004bcb90022"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0025",
+      "size": 50331648,
+      "sha256": "66718073033df95f8e30bfda95359d8cb040857196aa00986e8f5f1b6cfdf57e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0026",
+      "size": 50331648,
+      "sha256": "c16016fc195714e5234aa45c17e2c8f18e15ee1477bdae7c5043943b5d9777d1"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0027",
+      "size": 50331648,
+      "sha256": "b4251f03b1c4696a52606c999a36825d10e7b666ab77d3a62d6c79076aeaa7bf"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0028",
+      "size": 50331648,
+      "sha256": "6e577e3619be01a37cf044ade5c43fc823725bb0d2694c757b59ee9c4c258a54"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0029",
+      "size": 50331648,
+      "sha256": "151308e53e0b089c5f6a7bf61617c9897c7989a7ec408405eede148550e0fef4"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0030",
+      "size": 50331648,
+      "sha256": "83f8a3dbb60702f3b3c11735db23f169c1bdc2fecc5e74873a635c1fad6972d2"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0031",
+      "size": 50331648,
+      "sha256": "ecf74ea7f83a6522475aadb1998924e18af23ae8471db35362cfb50b0774c76d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0032",
+      "size": 50331648,
+      "sha256": "d6c31accf5ddb76672e34bc7a7d7ed7b801cfa0992d246de3b4ee537155f5c8c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0033",
+      "size": 50331648,
+      "sha256": "351213ad3a4e853d1ca37ee2d269e8b2dce975c1b6342e61bf4983402e47d74f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0034",
+      "size": 50331648,
+      "sha256": "f6fa3e2c6792e2800d2ebd2c95876439361f2150fb6d251999cc42619209ca86"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0035",
+      "size": 50331648,
+      "sha256": "0070f54b185fd7875a622f85a945b91743a81eeb156328f567a276bc97017994"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0036",
+      "size": 50331648,
+      "sha256": "522a9aaab6353de8717fbdc42a8f2966ba55bbf3c153a8729317bed8dde12d5a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0037",
+      "size": 50331648,
+      "sha256": "df4146b38b53e5a6a64da11b79160f319fef9cf97d4a6b458eb78c58615ebef7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0038",
+      "size": 50331648,
+      "sha256": "5a89f2124954973dfd68e05e17b27ae18b0da622614f51fc577ddca7ff32d01f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0039",
+      "size": 50331648,
+      "sha256": "c1b7230b3d4497ec40518cdf7fa1ab5fc68265c753caa9ec2cfba0f1ee1ca3f5"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0040",
+      "size": 50331648,
+      "sha256": "e0bd79b43367c532cf3372b1b3b4dc4c381a88915aeddc38feea3ace798378b0"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0041",
+      "size": 50331648,
+      "sha256": "6c4189e091c3f12a107fc0c9642c237490ac53aff75357d46b790bdc8ceea643"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0042",
+      "size": 50331648,
+      "sha256": "16fa86eadefa36b6ed1698b8323e35a1d6eda51eaf44c95a1ee56940abb0e93d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0043",
+      "size": 50331648,
+      "sha256": "3204e495b9c4381a6c79006850f8073bc11abbe0a3da23b90efec132824d21ab"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0044",
+      "size": 50331648,
+      "sha256": "5442e22cd78b65e0b7e20b27e9e7ea2f168fac69a7de81e0f8fa35bdf62c53b7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0045",
+      "size": 50331648,
+      "sha256": "acba6b70fd77e40a5ee9f7a69afa210b291ad2ed5a0506cffbc44b93e74cffd3"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0046",
+      "size": 50331648,
+      "sha256": "07b37cf9e8915db0fedd8fa4dc4e54c2748a89273cc0cdd24e36a301356a135d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0047",
+      "size": 50331648,
+      "sha256": "94d1001ca4a70c9188e826668fd9b26a6097f8ed4091e04407e8ebdd80c9ebce"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0048",
+      "size": 50331648,
+      "sha256": "09d60ed8f482c9bbd156748b8fb63918b6aaedd21d44150ae635767424b77d49"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0049",
+      "size": 50331648,
+      "sha256": "2ed23911c0e7ae96715b8eeda6c19eebac5ddc6014ddd95fe7e41c6fba863589"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0050",
+      "size": 50331648,
+      "sha256": "7ce061828ab9f710179f1c73389a57bcd3cfe4999bd6ccb376df9bf512093564"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0051",
+      "size": 50331648,
+      "sha256": "0f47badf7aeba9df120031b8c866b47f87c804a9782feaaecdc3610bc27da3f1"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0052",
+      "size": 50331648,
+      "sha256": "5e16f9cafa621d586efa7e75f5c7896353cf53f613663c43d73a18bf933e7fe7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0053",
+      "size": 50331648,
+      "sha256": "f3ac600debaa476bd1f29c86b83ce10c8e908c65c7681dfa6f6c76279e559609"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0054",
+      "size": 50331648,
+      "sha256": "5c4bdf6532facc4b7ce76510c70df0dfe7608ab422669acd90d1f85a94575cc4"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0055",
+      "size": 50331648,
+      "sha256": "94b9ea97537c3f0c6f5be9ce9936462c9c840a6c687eafa51c79b31988daea65"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0056",
+      "size": 50331648,
+      "sha256": "efd79e1da16c46168ef3907f08d046cf44e288b6bc108b2301107b662dfa3482"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0057",
+      "size": 50331648,
+      "sha256": "c1ace3c826218bad591b6047ca886dd30ef044774b994de8717bc2a04379c9db"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0058",
+      "size": 50331648,
+      "sha256": "c9821e2608c5fe70a885dfbfa2fd535d0e62784fe1283c1269530984d9a14923"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0059",
+      "size": 50331648,
+      "sha256": "a25eaab1f706ba0e6b856efee62573307cdf542f0c17ed0e1c97a619d8102f2f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0060",
+      "size": 50331648,
+      "sha256": "eaa447a46720d17ced80d1c5bcd8c3b0bc711f48f3260e134102fbd589a48c0f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0061",
+      "size": 50331648,
+      "sha256": "3eccc16dff793b21f83aac4d0b7618ed33dc3317db34ff62785904b61da31f56"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0062",
+      "size": 50331648,
+      "sha256": "1ad190b680cbeea577b90ccab0fbaeff0d4f0e072d0d08dc1ae74d8e1393325c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0063",
+      "size": 50331648,
+      "sha256": "072343ed452989ab397c4103706d1994a6ff642a55275e31a02d38302331334b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0064",
+      "size": 50331648,
+      "sha256": "dc99c09aa42cab703340e9b1623202ee522ea2620fb4dfc0bb965db4f2676b1e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0065",
+      "size": 50331648,
+      "sha256": "df26e68012301b02984f6683f04171453f17b124089c146dde3408b09fd83c5b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0066",
+      "size": 50331648,
+      "sha256": "3fec0e285766b1b0ca4eb9d6d1444451f99c9810a7d9c774cde34b38b0f68168"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0067",
+      "size": 50331648,
+      "sha256": "a1f4ff3730f99dcdc3e379d03004cbac27654ed058bc2e6f2812394bc678eaaa"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0068",
+      "size": 50331648,
+      "sha256": "f8f9929cd550c1d98d75edd8bfa9375f66688f8ae6b121a202786ff19ff0195b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0069",
+      "size": 50331648,
+      "sha256": "5a435c2edb0547e4e2865d45556f78fc40429a29e0d97962b0ee124658a1ad6d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0070",
+      "size": 50331648,
+      "sha256": "fe403decc1d27cf7604ecfc83374425ab9bdc22aae091680c57eeac6406d1852"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0071",
+      "size": 50331648,
+      "sha256": "82763969e481039359c4f467425ddb9dfea5b8c01a4ba99ad7634d3c36e03c20"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0072",
+      "size": 50331648,
+      "sha256": "afcd45edec72b6ec1d470952defc2385794d9d548e9187b5e45e569168505da6"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0073",
+      "size": 50331648,
+      "sha256": "8da2c1dd7cca955a5c5bd66e99ef15b1598c995290ea9c9d83d7eab9bd19180e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0074",
+      "size": 50331648,
+      "sha256": "c517f5aa2d3bb00fd09028476872bf76064e823bbc39f82ef326f5d3b919b68a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0075",
+      "size": 50331648,
+      "sha256": "90944c2354d372b2540d0b489a1d0a7df580575631431b6c6569a252f5f67445"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0076",
+      "size": 50331648,
+      "sha256": "6c4d8e7d97406416163ebf5391f2621f1c8280043711afb79d6edb1057037a2a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0077",
+      "size": 50331648,
+      "sha256": "3f7ff5bf8f43c765b38498792bea319daa00816e0a4458aef5b740087eb4c248"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0078",
+      "size": 50331648,
+      "sha256": "e9a5a745803523f144e154026893588de652dfb6b5e81f90862ce873e58a117e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0079",
+      "size": 50331648,
+      "sha256": "3ff184cbd3af74b8fb2c76ce4deec5626ec24d17e61dfe31db29213403b09770"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0080",
+      "size": 50331648,
+      "sha256": "92a82efd7b1334bc9bc317612203eb5f876f4f8f2ed514373b592bf954914f5c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0081",
+      "size": 50331648,
+      "sha256": "fcb2ba000cabc1957a929d8e086a199f9f42d37bf55d40173dda11299fb5053c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0082",
+      "size": 50331648,
+      "sha256": "4d9257ab6cb54873cb95055a1c83b6d843f785372e2dd0bf655d33ca6125ed62"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0083",
+      "size": 50331648,
+      "sha256": "a31edc1726142841179be7bfba53ad62620cf591f22ae285977aca968663d9ba"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0084",
+      "size": 50331648,
+      "sha256": "fd98c2efb22a35bcefb01c6d52b96ddfdfce1c4d63bafd482841ae719192c3ed"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0085",
+      "size": 50331648,
+      "sha256": "3e2489312f424cd5520ec2072eb5431b42637804d726e9daeec5eea2c60714e0"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0086",
+      "size": 50331648,
+      "sha256": "3dc77a83a3116e2acb12aefa04957be6d5eae49eda6662eb9e35c1c89b191432"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0087",
+      "size": 50331648,
+      "sha256": "d69f778cbca3fd809e88cdaaabada857bed437533d68b8cb6ebd83eb0f8afdcc"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0088",
+      "size": 50331648,
+      "sha256": "d76900d29cfb427b0fc6b9e11237cd1d2dea21a43c0ad868341b93cc87f674f6"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0089",
+      "size": 50331648,
+      "sha256": "9e1e77dd998e26bb66925ec9c5a97d0e618781f2a8dfe58cd64248058b247f8e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0090",
+      "size": 50331648,
+      "sha256": "275704afb1d41023f96075d520db8abdb60f0e9d116fa87af7c9f13b17e98e3f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0091",
+      "size": 50331648,
+      "sha256": "9ef6416251e7730931f137075aad3eb863994c2fd18237e31e5a396961eafde3"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0092",
+      "size": 50331648,
+      "sha256": "fd5cb35142e81437d545b07e30bf359a0e6fc7d29eb79770e1a5b2964955392a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0093",
+      "size": 50331648,
+      "sha256": "150937cdf993ac9a0f32a8a035e9170e2cb816dec832e978bda99fdba73e4e2d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0094",
+      "size": 50331648,
+      "sha256": "c17d9e46af9a7c099df88253a88d0d19625ce4c417ecb7d05959862949aa47ed"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0095",
+      "size": 50331648,
+      "sha256": "0a46120f1edb9f130a5fc803fb0a6b22f91c7563134b1b51543ed3a72fb9241c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0096",
+      "size": 50331648,
+      "sha256": "de212d9e0ee73dfe31b413c083bba81e47b2c840700e2203b3c1142d6dfbac0c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0097",
+      "size": 50331648,
+      "sha256": "ad4b6650e5916c953f1c43e4eea1a21fae22adc6cd9934b2f029313d0139367d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0098",
+      "size": 50331648,
+      "sha256": "7022e195ddb57ac031c34265e4c1d3e189f132b0972053891fe64613884fff08"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0099",
+      "size": 50331648,
+      "sha256": "31e1b0944dd44270e7fcddeccca2e240c4d6109427115beba244da60562dab1d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0100",
+      "size": 50331648,
+      "sha256": "05e8f1c3f82aecf19a81f36682b13d57d833bfb74eca5c14003ce8df117e9a7a"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0101",
+      "size": 50331648,
+      "sha256": "d632900263d9a007c17cd618037b20a8932083fe739de72c4faafce19a2676d8"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0102",
+      "size": 50331648,
+      "sha256": "f8da3d2356d621ecdb97ec8bc37cb9ed09c141e5d25da9b6c1c82caa8b9a7c61"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0103",
+      "size": 50331648,
+      "sha256": "260f65cc71667a3de2eba615700ce385afcf5e4a25edb29c6470c73362bd6b4c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0104",
+      "size": 50331648,
+      "sha256": "0c621fac5e20d715b3d8cd25debda8bbf90faccd6eeac69cc52a880d2eacbbe4"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0105",
+      "size": 50331648,
+      "sha256": "3d36e23ca85879dfbe51cbfeb2642c28afcf4143fbb07f73e10ed0f907966612"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0106",
+      "size": 50331648,
+      "sha256": "aa57ba0d1e6fe04097bf5fedba09546d33d123c2b5ef0a7b55d9cd9526e3ed94"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0107",
+      "size": 50331648,
+      "sha256": "07f8a53ba9d31ee4b513b41733f4f594305a3c7cf837181a8eb681b14fb9f8a0"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0108",
+      "size": 50331648,
+      "sha256": "70d37708e9f816621d0eeb5216848b647358a0a737c13ce203c95d044c975835"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0109",
+      "size": 50331648,
+      "sha256": "e561fcb4fdb1c546b06872d9575f89de57001906251133ff77261d394dc032f7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0110",
+      "size": 50331648,
+      "sha256": "ef1eef5de376c9feaaf7bdd407b15304239864fe85780b3771878c30c16796d2"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0111",
+      "size": 50331648,
+      "sha256": "2b69515d62481a02be1bdc37cb708c71f1498a6c436ad6f81d8a8f698d717a36"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0112",
+      "size": 50331648,
+      "sha256": "ea733e5f96e119977b9d1ba2d3598002431aca18b4399aa0529ca40732011d8f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0113",
+      "size": 50331648,
+      "sha256": "a2ddd52767ac3487c153a77972f909fb27112cf940f0aadcc4b762e1de079535"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0114",
+      "size": 50331648,
+      "sha256": "5ac45e90be1398cc7e5362d014e7a68c906ba447ced653bc31bb122ca3f8cc84"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0115",
+      "size": 50331648,
+      "sha256": "e638fad6ce9f5badfe630c9a44332ac85112a4356dc5db8e6ade6f85f48de509"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0116",
+      "size": 50331648,
+      "sha256": "ee217a3efb9e51a9c9a873ea121af1ae06b564514dbf2a0502fe64fa59a2f72b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0117",
+      "size": 50331648,
+      "sha256": "8ea8075d36f6cf714470dcd182a151a9b6b0e7477ad01e09c11a0768b79aa634"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0118",
+      "size": 50331648,
+      "sha256": "d27b74fcd1cc09c1d3bd9e54aaf6dd8fdf892ae78254c1c2f10a76fc95649eb9"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0119",
+      "size": 50331648,
+      "sha256": "08859be0c7ab50c179953e1acc1e0a99fa98e8513efcb73edd7c79ad99e0ae96"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0120",
+      "size": 50331648,
+      "sha256": "53d3b0fe1da8751b1a961930faffb346f4d38412f29189cff5ee0b7588917d89"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0121",
+      "size": 50331648,
+      "sha256": "57537cdaf5ff6edfafa19f12c4ba8b006e099b023a4bee16a3a9a72f0e419353"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0122",
+      "size": 50331648,
+      "sha256": "1136534af9a967f59f8a8a966a6b298536eadc3979ea51a815efe882da670bdc"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0123",
+      "size": 50331648,
+      "sha256": "828c4e202f89e21cb86283386ac6d76867ca7afc0af9d383825d85a69265b74f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0124",
+      "size": 50331648,
+      "sha256": "d0658a6bf960bd910ebeaff7c026d2649b6ecf7d66edac6dc94e51ae88a5e3c1"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0125",
+      "size": 50331648,
+      "sha256": "d13701151f92b9669e97993e994d251ed103a0bb930259e858432147a8b6dd91"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0126",
+      "size": 50331648,
+      "sha256": "a5b38c8e9e46889f2607f021a18955d058e365457421d62cff91d75c28ed7b28"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0127",
+      "size": 50331648,
+      "sha256": "e8e2a4ded4f9fd2f6230bd1858eed68693613fb8500e5b8934757e4cf33e1423"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0128",
+      "size": 50331648,
+      "sha256": "88dd9280e5b574aafb542ff7d10ab2630ca4446af2738e5965df2edb801af67f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0129",
+      "size": 50331648,
+      "sha256": "6d3a3c7ab8a648dec2aaa08a5e13f996fc10ba3f0330fac4e6485f1f26584594"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0130",
+      "size": 50331648,
+      "sha256": "f2620e7b343b50ccb34f444c7ec8b8d97b20bb3c3291216c14a798e2f6cbf1ff"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0131",
+      "size": 50331648,
+      "sha256": "b86f3d2be01c47b9bd1d4a7e784c5c34b8fdccd959236a1c7e0b16a3a7b6c313"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0132",
+      "size": 50331648,
+      "sha256": "4efaf8de09d46c1fefb75988327b5bac6ea923009d5b4f89b616dfa77cd2195e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0133",
+      "size": 50331648,
+      "sha256": "c06426ee15531b0910a998d4eb99f882e51185c91f09a9ce5a719eca3ba9855b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0134",
+      "size": 50331648,
+      "sha256": "7b12d9e40a4728cdc180ab0e1ba98ccf2419f2d4fcbf6607d5466a88a11c6bf4"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0135",
+      "size": 50331648,
+      "sha256": "44af60d44e46d824e905585ac7712cfbb0d0c273ad8cc58bcde25efb2e7d042e"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0136",
+      "size": 50331648,
+      "sha256": "4dc8e1b5d9a3343fe3dc3d71819ab88533716189e1034ece6b3d493d6bff7e57"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0137",
+      "size": 50331648,
+      "sha256": "3a6e7e3f8e9af650fb47d6a98317615e470dd5c54a381014cf3ea426221b85a7"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0138",
+      "size": 50331648,
+      "sha256": "7e37ab5a89f29e51f3dc516ddaffd6785f4a5775f42a4d364e72b49c4db5872f"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0139",
+      "size": 50331648,
+      "sha256": "c6b5bcebf2670d1269e860bde4b274df1ce3075494200a6b0beb3d4ce755012c"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0140",
+      "size": 50331648,
+      "sha256": "059de57ef954ec4a1f9950354d49e170faccd03316926ba80c045282782c1595"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0141",
+      "size": 50331648,
+      "sha256": "9a9388cbe3f112f1f14e5c81f200ce082a0a061af67c04b57f9ccf347199e389"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0142",
+      "size": 50331648,
+      "sha256": "1c6785d4593ed881f90ec2ad00ae251bfa59fcb19f24e869a35ed0c92d2f06ba"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0143",
+      "size": 50331648,
+      "sha256": "9109d1d4b67d7cc3ac5aeb7fcaad52dd282903aaecac71e8b4869c7d4ad0b78b"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0144",
+      "size": 50331648,
+      "sha256": "f1d7da44092cb8d986a17d1e4798e90a2c72d12380e4a3633bb5e884a65ce62d"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0145",
+      "size": 50331648,
+      "sha256": "306aecd9ac2693e6f49908a6341e01bb24aa349f29a6ca59a421cf3658590d20"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0146",
+      "size": 50331648,
+      "sha256": "97f8b17f10c5dd1c128a16ecdedf33be34dacb63575a09ddd9916bc62d8f5f39"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0147",
+      "size": 50331648,
+      "sha256": "e0ca235f7607f973ad68da02037df7fac9b166f2032c3e4fa036221436655876"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0148",
+      "size": 50331648,
+      "sha256": "2223c58e889f2bfd5c87712807e3c25f857f5ccdc38e906ed89eb7af90880137"
+    },
+    {
+      "name": "qwen3.5-9b-uncensored.Q4_K_M.gguf.b64.part0149",
+      "size": 6064384,
+      "sha256": "c05d15dcf4fb234c7616b88509705d846355cf6ae14cba23bd1b427a868348ac"
+    }
+  ],
+  "files": {
+    "LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "GGUF-MODEL-CARD.md": "6a5ab003e454b0f051075861b24a8d385f620bfef8fd157d7ecba897d2329158",
+    "UPSTREAM-MODEL-CARD.md": "ed698ec2df403b1b70c48c68bb02ee4d4322edbc0955f8a27f58b02aef9fb2b9",
+    "decode.py": "63733b91b1a50b3a5bdf76bc57f887064b95677cecd9fb40390a9256649e8d88",
+    "README.md": "1624705c9748e77a05f19eebfb3d11f62c66d76cd7f5dfb6402bfa72ef17d822",
+    ".gitattributes": "c67ca2d426f4f97c12053320a2c820430ed61ff190e7568f42213daf482c5e8e",
+    ".gitignore": "2c8771d2b02309b90ec33d9b70f726937b868c37484c1788c4ed82dd4bc1982d"
+  }
+}

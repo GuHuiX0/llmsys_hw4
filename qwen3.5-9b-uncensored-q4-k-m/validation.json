@@ -1,0 +1,8 @@
+{
+  "source_sha256": "passed",
+  "gguf_magic": "GGUF",
+  "gguf_version": 3,
+  "git_blob_base64_round_trip_sha256": "passed",
+  "part_count": 150,
+  "inference_tested": false
+}
