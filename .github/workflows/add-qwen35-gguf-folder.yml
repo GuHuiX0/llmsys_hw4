@@ -1,0 +1,270 @@
+name: Add Qwen3.5 9B uncensored GGUF base64 to main
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/add-qwen35-gguf-folder.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: add-qwen35-gguf-folder
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GIT_TERMINAL_PROMPT: '0'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - name: Prepare repository for batched large-file uploads
+        shell: bash
+        run: |
+          gh auth setup-git
+          git clone --filter=blob:none --no-checkout --depth 1 --branch main \
+            "https://github.com/$GITHUB_REPOSITORY.git" "$RUNNER_TEMP/qwen-model-repo"
+          cd "$RUNNER_TEMP/qwen-model-repo"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config core.compression 1
+          git config pack.compression 1
+          git config pack.window 0
+          git config pack.threads 2
+          git config gc.auto 0
+          git config maintenance.auto false
+          df -h "$RUNNER_TEMP"
+
+      - name: Download, verify, encode, upload in batches, and complete main
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/qwen-model-repo"
+          python3 - <<'PY'
+          import base64
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import struct
+          import subprocess
+          import tempfile
+          import time
+          
+          MODEL = "mradermacher/qwen3.5-9b-uncensored-GGUF"
+          REVISION = "ad62a6aa367341aa47262e20259c12956a98fad4"
+          FILE = "qwen3.5-9b-uncensored.Q4_K_M.gguf"
+          EXPECTED = "c70f4a08f6730ee74311f1cdfec2fef8ecc5cc4812de07bb8386854c844bcaab"
+          SOURCE = f"https://huggingface.co/{MODEL}/resolve/{REVISION}/{FILE}"
+          FOLDER = "qwen3.5-9b-uncensored-q4-k-m"
+          DECODE = "\"\"\"Restore the GGUF from split base64. Python 3.8+; no extra packages.\"\"\"\nimport base64\nimport hashlib\nimport json\nfrom pathlib import Path\n\ndef digest(path):\n    value = hashlib.sha256()\n    with path.open(\"rb\") as source:\n        while block := source.read(8 * 1024 * 1024):\n            value.update(block)\n    return value.hexdigest()\n\ndef main():\n    root = Path(__file__).resolve().parent\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    for name, expected in manifest[\"files\"].items():\n        if digest(root / name) != expected:\n            raise SystemExit(f\"Checksum failed: {name}. Download the folder again.\")\n    target = root / manifest[\"file\"]\n    if target.exists():\n        if digest(target) == manifest[\"sha256\"]:\n            print(f\"{target.name} already exists and is verified.\")\n            return\n        raise SystemExit(f\"{target.name} exists but differs. Move it aside first.\")\n    temporary = target.with_suffix(target.suffix + \".partial\")\n    output = temporary.open(\"xb\")\n    original_hash = hashlib.sha256()\n    encoded_hash = hashlib.sha256()\n    total = 0\n    try:\n        with output:\n            for part in manifest[\"base64_parts\"]:\n                part_hash = hashlib.sha256()\n                part_size = 0\n                with (root / part[\"name\"]).open(\"rb\") as source:\n                    while block := source.read(8 * 1024 * 1024):\n                        encoded_hash.update(block)\n                        part_hash.update(block)\n                        part_size += len(block)\n                        decoded = base64.b64decode(block, validate=True)\n                        output.write(decoded)\n                        original_hash.update(decoded)\n                        total += len(decoded)\n                if part_hash.hexdigest() != part[\"sha256\"] or part_size != part[\"size\"]:\n                    raise ValueError(f\"Corrupt part: {part['name']}\")\n                print(f\"Decoded {part['name']}\", flush=True)\n        if encoded_hash.hexdigest() != manifest[\"base64_sha256\"]:\n            raise ValueError(\"Combined base64 SHA-256 mismatch\")\n        if original_hash.hexdigest() != manifest[\"sha256\"] or total != manifest[\"size\"]:\n            raise ValueError(\"Decoded GGUF SHA-256 or size mismatch\")\n        temporary.rename(target)\n    except BaseException:\n        temporary.unlink(missing_ok=True)\n        raise\n    print(f\"Ready: {target.name} restored and SHA-256 verified.\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          
+          def git(*args, data=None, env=None):
+              result = subprocess.run(["git", *args], input=data, stdout=subprocess.PIPE,
+                                      check=True, env=env)
+              return result.stdout.decode().strip()
+          
+          def download(url, destination):
+              subprocess.run(["curl", "--fail", "--location", "--silent", "--show-error",
+                              "--retry", "5", "--connect-timeout", "30", "--max-time", "3600",
+                              "--output", str(destination), url], check=True)
+          
+          def file_digest(path):
+              with path.open("rb") as source:
+                  return hashlib.file_digest(source, "sha256").hexdigest()
+          
+          def stage_blob(env, folder, name, content):
+              blob = git("hash-object", "-w", "--stdin", data=content)
+              git("update-index", "--add", "--cacheinfo", f"100644,{blob},{folder}/{name}", env=env)
+              return blob
+          
+          def retry_push(*refspecs):
+              for attempt in range(3):
+                  try:
+                      git("push", "origin", *refspecs)
+                      return
+                  except subprocess.CalledProcessError:
+                      if attempt == 2:
+                          raise
+                      time.sleep(10)
+          
+          def checkpoint(env, branch, message):
+              parent = git("rev-parse", branch)
+              tree = git("write-tree", env=env)
+              commit = git("commit-tree", tree, "-p", parent, "-m", message, env=env)
+              git("update-ref", f"refs/heads/{branch}", commit, parent)
+              retry_push(f"{branch}:{branch}")
+              print(f"Uploaded batch: {message}", flush=True)
+              return commit
+          
+          def verify_git_parts(parts, blobs, expected_sha, expected_size, expected_base64):
+              restored = hashlib.sha256()
+              combined = hashlib.sha256()
+              size = 0
+              for part, blob in zip(parts, blobs):
+                  current = hashlib.sha256()
+                  count = 0
+                  process = subprocess.Popen(["git", "cat-file", "blob", blob], stdout=subprocess.PIPE)
+                  try:
+                      # A pipe may return a short read. Buffer to preserve base64 groups of four.
+                      carry = b""
+                      while block := process.stdout.read(8 * 1024 * 1024):
+                          current.update(block)
+                          combined.update(block)
+                          count += len(block)
+                          block = carry + block
+                          boundary = len(block) - len(block) % 4
+                          decoded = base64.b64decode(block[:boundary], validate=True)
+                          carry = block[boundary:]
+                          restored.update(decoded)
+                          size += len(decoded)
+                      if carry:
+                          raise ValueError("Truncated base64 group in Git blob")
+                  finally:
+                      process.stdout.close()
+                      if process.wait() != 0:
+                          raise ValueError("Cannot read stored Git blob")
+                  if count != part["size"] or current.hexdigest() != part["sha256"]:
+                      raise ValueError(f"Stored part checksum mismatch: {part['name']}")
+              if restored.hexdigest() != expected_sha or size != expected_size:
+                  raise ValueError("Git-stored base64 does not reconstruct the source GGUF")
+              if combined.hexdigest() != expected_base64:
+                  raise ValueError("Combined Git-stored base64 hash mismatch")
+          
+          def finish_main(branch):
+              for attempt in range(3):
+                  git("fetch", "--no-tags", "origin", "main")
+                  current_main = git("rev-parse", "refs/remotes/origin/main")
+                  head = git("rev-parse", branch)
+                  ancestor = subprocess.run(["git", "merge-base", "--is-ancestor", current_main, head])
+                  if ancestor.returncode == 1:
+                      tree = git("merge-tree", "--write-tree", current_main, head)
+                      head = git("commit-tree", tree, "-p", current_main, "-p", head,
+                                 "-m", "Merge verified Qwen3.5 9B GGUF model folder")
+                      git("update-ref", f"refs/heads/{branch}", head)
+                  elif ancestor.returncode != 0:
+                      raise ValueError("Unable to verify main ancestry")
+                  try:
+                      git("push", "origin", f"{branch}:main")
+                      return head
+                  except subprocess.CalledProcessError:
+                      if attempt == 2:
+                          raise
+                      time.sleep(5)
+          
+          def publish_model(source_path, expected_sha, source_url, folder, branch, documents,
+                            part_binary_bytes=36 * 1024 * 1024, batch_parts=16):
+              if part_binary_bytes <= 0 or part_binary_bytes % 3:
+                  raise ValueError("Part binary size must be positive and divisible by three")
+              if git("ls-tree", "HEAD", "--", folder):
+                  raise ValueError(f"Destination folder already exists: {folder}")
+              with source_path.open("rb") as source:
+                  if source.read(4) != b"GGUF":
+                      raise ValueError("Source is not a GGUF")
+                  version = struct.unpack("<I", source.read(4))[0]
+                  if version not in (2, 3):
+                      raise ValueError(f"Unsupported GGUF version: {version}")
+              if file_digest(source_path) != expected_sha:
+                  raise ValueError("Source GGUF SHA-256 mismatch")
+              print(f"Verified source: {source_path.stat().st_size} bytes, SHA-256 {expected_sha}", flush=True)
+              git("branch", branch, "HEAD")
+              with tempfile.TemporaryDirectory() as temp:
+                  env = os.environ.copy()
+                  env["GIT_INDEX_FILE"] = str(Path(temp) / "index")
+                  git("read-tree", branch, env=env)
+                  parts, blobs = [], []
+                  combined = hashlib.sha256()
+                  with source_path.open("rb") as source:
+                      while binary := source.read(part_binary_bytes):
+                          encoded = base64.b64encode(binary)
+                          if len(encoded) >= 100 * 1024 * 1024:
+                              raise ValueError("Part exceeds GitHub's object size limit")
+                          name = f"{source_path.name}.b64.part{len(parts):04d}"
+                          blob = stage_blob(env, folder, name, encoded)
+                          blobs.append(blob)
+                          parts.append({"name": name, "size": len(encoded),
+                                        "sha256": hashlib.sha256(encoded).hexdigest()})
+                          combined.update(encoded)
+                          print(f"Encoded part {len(parts)}: {len(encoded)} bytes", flush=True)
+                          if len(parts) % batch_parts == 0:
+                              checkpoint(env, branch, f"Add Qwen GGUF base64 parts through {len(parts):04d}")
+                  print("Verifying reconstruction directly from all stored Git objects", flush=True)
+                  verify_git_parts(parts, blobs, expected_sha, source_path.stat().st_size, combined.hexdigest())
+                  readme = (
+                      "# Qwen3.5 9B Uncensored - GGUF Q4_K_M\n\n"
+                      "These are the GGUF weights from the upstream model, encoded as plain base64.\n"
+                      f"The base64 is split into {len(parts)} parts, each at most 48 MiB. Keep all parts together.\n\n"
+                      "From the repository root, decode with Python 3.8 or newer:\n\n"
+                      f"```sh\npython {folder}/decode.py\n```\n\n"
+                      "On Linux/macOS use python3 if needed. No extra Python packages are required.\n"
+                      "The decoder checks every part and the reconstructed model against SHA-256.\n"
+                      f"The restored file is {source_path.name} in this folder.\n"
+                      f"Allow {source_path.stat().st_size / 1e9:.2f} GB of additional disk space for the decoded GGUF.\n\n"
+                      f"Source: {source_url}\n\n"
+                      "The weights are redistributed unchanged under Apache-2.0; see LICENSE.txt and the model cards.\n"
+                      "validation.json records the source checksum, GGUF header, and verification of decoding the Git objects.\n"
+                      "Inference was not run as part of this upload.\n"
+                  ).encode()
+                  support = {
+                      **documents, "decode.py": DECODE.encode(), "README.md": readme,
+                      ".gitattributes": b"*.b64.part* -text -diff\n",
+                      ".gitignore": b"*.gguf\n*.partial\n",
+                  }
+                  manifest = {
+                      "model": MODEL, "revision": REVISION, "quantization": "Q4_K_M", "format": "GGUF",
+                      "file": source_path.name, "source": source_url, "size": source_path.stat().st_size,
+                      "sha256": expected_sha, "encoding": "base64", "base64_sha256": combined.hexdigest(),
+                      "base64_parts": parts,
+                      "files": {name: hashlib.sha256(data).hexdigest() for name, data in support.items()},
+                  }
+                  support["manifest.json"] = (json.dumps(manifest, indent=2) + "\n").encode()
+                  validation = {
+                      "source_sha256": "passed", "gguf_magic": "GGUF", "gguf_version": version,
+                      "git_blob_base64_round_trip_sha256": "passed", "part_count": len(parts),
+                      "inference_tested": False,
+                  }
+                  support["validation.json"] = (json.dumps(validation, indent=2) + "\n").encode()
+                  checksums = [f"{part['sha256']}  {part['name']}\n" for part in parts]
+                  checksums += [f"{hashlib.sha256(data).hexdigest()}  {name}\n" for name, data in support.items()]
+                  support["SHA256SUMS"] = "".join(checksums).encode()
+                  for name, data in support.items():
+                      stage_blob(env, folder, name, data)
+                  checkpoint(env, branch, "Complete verified Qwen3.5 9B uncensored GGUF model folder")
+                  final = finish_main(branch)
+                  retry_push("--delete", branch)
+                  return {"commit": final, "part_count": len(parts), "folder": folder}
+          
+          def main():
+              source = Path(os.environ["RUNNER_TEMP"]) / FILE
+              if shutil.disk_usage(source.parent).free < 12 * 1024**3:
+                  raise ValueError("At least 12 GiB of free runner disk space is required")
+              print(f"Downloading pinned source: {SOURCE}", flush=True)
+              download(SOURCE, source)
+              remaining = shutil.disk_usage(source.parent).free
+              if remaining < source.stat().st_size + 1024**3:
+                  raise ValueError("Insufficient disk space for Git objects")
+              documents = {}
+              urls = {
+                  "LICENSE.txt": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+                  "GGUF-MODEL-CARD.md": f"https://huggingface.co/{MODEL}/raw/{REVISION}/README.md",
+                  "UPSTREAM-MODEL-CARD.md": "https://huggingface.co/mshodiqul/qwen3.5-9b-uncensored/raw/main/README.md",
+              }
+              with tempfile.TemporaryDirectory() as temp:
+                  for name, url in urls.items():
+                      path = Path(temp) / name
+                      download(url, path)
+                      documents[name] = path.read_bytes()
+              branch = "upload-qwen35-gguf-" + os.environ["GITHUB_RUN_ID"]
+              result = publish_model(source, EXPECTED, SOURCE, FOLDER, branch, documents)
+              print("Completed: " + json.dumps(result), flush=True)
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+                  summary.write(f"[Open Qwen GGUF folder on main](https://github.com/{os.environ['GITHUB_REPOSITORY']}/tree/main/{FOLDER})\n\n"
+                                f"{result['part_count']} verified base64 parts. Commit: {result['commit']}\n")
+          
+          if __name__ == "__main__":
+              main()
+          PY
